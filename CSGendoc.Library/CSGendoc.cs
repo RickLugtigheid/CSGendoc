@@ -64,7 +64,10 @@ namespace CSGendoc.Library
 				return;
 			}
 
-			// TODO: Setup lua objects/references
+			// Setup lua objects/references
+			//
+			LuaExecutor["Gendoc"]	= new LuaObjects.LuaGendocHelper();
+			LuaExecutor["Query"]	= new LuaObjects.DllQuery(AssemblyLoader.Assemblies.ToArray());
 
 			Log.Information("CSGendoc started" + (verbose ? " in Verbose mode" : string.Empty) + ".");
 			Initialized = true;
@@ -95,7 +98,7 @@ namespace CSGendoc.Library
 			}
 			catch (Exception ex)
 			{
-				Log.Error($"{ex.GetType().Name} '{ex.Message}' when executing builder script '{scriptPath}'");
+				Log.Error(ex.ToString());
 			}
 		}
 
