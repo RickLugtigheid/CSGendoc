@@ -8,6 +8,8 @@ namespace CSGendoc.Library
 {
 	public static class CSGendoc
 	{
+		public const string VERSION = "0.1.0";
+
 		public static string WorkDirectory { get; set; }
 		public static ILogger Log { get; private set; }
 		public static Lua LuaExecutor { get; } = new Lua();

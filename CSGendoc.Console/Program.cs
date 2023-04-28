@@ -15,7 +15,7 @@ namespace CSGendoc
 		{
 			if (opts.PrintVersion)
 			{
-				Console.WriteLine();
+				Console.WriteLine(Library.CSGendoc.VERSION);
 				return;
 			}
 
