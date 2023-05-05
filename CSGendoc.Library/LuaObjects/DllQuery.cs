@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NLua;
+using System.Collections;
 using System.Reflection;
 
 namespace CSGendoc.Library.LuaObjects
@@ -38,17 +39,16 @@ namespace CSGendoc.Library.LuaObjects
         /// </summary>
         /// <param name="baseClassName">Name of the parent/base class</param>
         /// <returns>Children found</returns>
-        public Type[] SelectChildrenOf(string baseClassName)
+        public LuaTable SelectChildrenOf(string baseClassName)
         {
             Type? baseClass = SelectClassByName(baseClassName);
 
             if (baseClass == null)
             {
-                return new Type[] { };
-            }
+                return CSGendoc.LuaExecutor.ToTable(new Type[] { });
+			}
 
             List<Type> children = new List<Type>();
-            children.Add(null); // For lua
             foreach (Assembly assembly in _assemblies)
             {
                 try
@@ -63,11 +63,10 @@ namespace CSGendoc.Library.LuaObjects
                 }
                 catch (Exception e)
                 {
-                    //Gendoc.Log.Error(e.ToString());
                     Console.WriteLine(e.ToString());
                 }
             }
-            return children.ToArray();
+            return CSGendoc.LuaExecutor.ToTable(children);
         }
     }
 }
