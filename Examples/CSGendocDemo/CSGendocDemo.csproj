@@ -5,13 +5,18 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include=".csgendoc\.config" />
     <None Include=".csgendoc\animal.builder.lua" />
+    <None Include=".csgendoc\common.builder.lua" />
+    <None Include=".csgendoc\interface.builder.lua" />
     <None Include=".csgendoc\helloWorld.lua" />
     <None Include=".csgendoc\template\animal.md" />
+    <None Include=".csgendoc\template\class.template.md" />
+    <None Include=".csgendoc\template\interface.template.md" />
   </ItemGroup>
 
 </Project>

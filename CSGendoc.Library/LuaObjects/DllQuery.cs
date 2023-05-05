@@ -68,5 +68,33 @@ namespace CSGendoc.Library.LuaObjects
             }
             return CSGendoc.LuaExecutor.ToTable(children);
         }
+
+        /// <summary>
+        /// Select all <see cref="Type"/>s from the given namespace.
+        /// </summary>
+        /// <param name="namespacePath"></param>
+        /// <returns></returns>
+        public LuaTable SelectAllFromNamespace(string namespacePath)
+        {
+			List<Type> all = new List<Type>();
+			foreach (Assembly assembly in _assemblies)
+			{
+				try
+				{
+					foreach (Type type in assembly.GetTypes())
+					{
+						if (type.Namespace == namespacePath)
+						{
+							all.Add(type);
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.ToString());
+				}
+			}
+            return CSGendoc.LuaExecutor.ToTable(all);
+		}
     }
 }
