@@ -16,7 +16,7 @@ for _, interface in ipairs(interfaces) do
 		print("build documentation")
 		local data = {
 			type	= interface,
-			methods = interface:GetMethods()
+			doc		= Query:SelectDocForType(interface)
 		}
 		Gendoc:Build(interface.Name..'.interface.md', 'template/interface.template.md', data)
 	end

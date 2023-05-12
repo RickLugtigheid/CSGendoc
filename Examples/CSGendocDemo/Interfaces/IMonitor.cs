@@ -32,5 +32,10 @@ namespace CSGendocDemo.Interfaces
 		/// </summary>
 		/// <param name="timeout">The timeout to wait before starting the monitor after stopping.</param>
 		void Restart(int timeout = 1000);
+		/// <summary>
+		/// Gets the time in milliseconds before the next heartbeat.
+		/// </summary>
+		/// <returns>Time before next heartbeat in milliseconds</returns>
+		int TimeBeforeNextHeartbeat();
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using CSGendoc.Library.Common;
 using Serilog;
+using System.IO;
 using System.Reflection;
+using System.Xml;
 
 namespace CSGendoc.Library.Loaders
 {
@@ -8,6 +10,8 @@ namespace CSGendoc.Library.Loaders
 	{
 		private static ILogger Log { get; set; }
 		public static List<Assembly> Assemblies { get; } = new List<Assembly>();
+		public static List<XmlElement> XmlDocumentation { get; } = new List<XmlElement>();
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -36,6 +40,13 @@ namespace CSGendoc.Library.Loaders
 					{
 						Log.Debug("Loading Assembly: " + path);
 						Assemblies.Add(Assembly.LoadFile(path));
+
+						// Check if we should try to load a documentation.xml file for this assembly
+						//
+						if (CSGendoc.config.assembly.includeDocFiles)
+						{
+							TryLoadXmlDocForAssembly(path);
+						}
 					}
 				}
 				catch (Exception e)
@@ -50,6 +61,34 @@ namespace CSGendoc.Library.Loaders
 				return false;
 			}
 			return true;
+		}
+
+		private static void TryLoadXmlDocForAssembly(string assemblyPath)
+		{
+			string xmlDocPath = Path.ChangeExtension(assemblyPath, ".xml");
+
+			// Check if an xml documentation file is found on this path
+			//
+			if (!File.Exists(xmlDocPath))
+			{
+				return;
+			}
+
+			// Load the xml documentation file
+			//
+			try
+			{
+				Log.Debug("Loading Documentation: " + xmlDocPath);
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.Load(xmlDocPath);
+
+				// Add the doc element since we only need that element.
+				XmlDocumentation.Add(xmlDoc["doc"]);
+			}
+			catch (Exception e)
+			{
+				Log.Error($"{e.GetType().Name} '{e.Message}' when trying to load Documentation from '{xmlDocPath}'");
+			}
 		}
 	}
 }

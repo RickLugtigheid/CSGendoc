@@ -1,6 +1,8 @@
-﻿using NLua;
+﻿using Newtonsoft.Json;
+using NLua;
 using System.Collections;
 using System.Reflection;
+using System.Xml;
 
 namespace CSGendoc.Library.LuaObjects
 {
@@ -10,6 +12,46 @@ namespace CSGendoc.Library.LuaObjects
         public DllQuery(Assembly[] assemblies)
         {
             _assemblies = assemblies;
+        }
+
+		/// <summary>
+		/// Selects all documentation for the given Type.
+		/// <para>Note: This requires the build to contain 1 or more XML documentation files, and requires the .config.assembly.includeDocFiles to be True</para>
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public TypeDoc SelectDocForType(Type type)
+        {
+            foreach (XmlElement documentation in Loaders.AssemblyLoader.XmlDocumentation)
+            {
+                // Check if the documentation has members
+                //
+                if (documentation["members"] == null)
+                {
+                    continue;
+                }
+
+                // Check if our Type can be found in documentation members
+                //
+                foreach (XmlNode member in documentation["members"])
+                {
+                    // Check if the member has the name attribute
+                    //
+                    if (member.Attributes == null || member.Attributes["name"] == null)
+                    {
+                        continue;
+                    }
+
+					// Check if the name attribute matches our Type
+                    // 
+                    if (member.Attributes["name"].Value == "T:" + type.FullName)
+                    {
+                        // Return our Type documentation object
+                        return new TypeDoc(type, CSGendoc.LuaExecutor, member, documentation["members"]);
+                    }
+				}
+			}
+            return null; // No documentation was found for this type
         }
 
         /// <summary>
@@ -33,6 +75,7 @@ namespace CSGendoc.Library.LuaObjects
             }
             return null;
         }
+
 
         /// <summary>
         /// Select all child classes that extend the given class.

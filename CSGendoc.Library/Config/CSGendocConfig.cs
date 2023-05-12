@@ -9,10 +9,11 @@ namespace CSGendoc.Library.Config
 	public class CSGendocAssemblyConfig
 	{
 		public string[] include;
+		public bool includeDocFiles = false;
 	}
 	public class CSGendocBuildConfig
 	{
 		public string[] scripts;
-		public string dirOut;
+		public string dirOut = "./build";
 	}
 }
