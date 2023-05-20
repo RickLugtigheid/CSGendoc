@@ -13,12 +13,6 @@ namespace CSGendoc
 
 		static void HandleCommand(Options opts)
 		{
-			if (opts.PrintVersion)
-			{
-				Console.WriteLine(Library.CSGendoc.VERSION);
-				return;
-			}
-
 			// Get the work directory
 			//
 			if (opts.WorkDirectory == null)
